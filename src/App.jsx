@@ -1,21 +1,20 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import House from "./components/House";
 import "./App.css";
 
 export default function App() {
-  const [background, setBackground] = useState("/textures/skybox7.hdr");
-  const [cameraPosition, setCameraPosition] = useState([-6, -1, 12]);
+  // Paths for HDR files
+  const skybox7 = "/textures/skybox7.hdr";
+  const skybox3 = "/textures/skybox3.hdr";
 
-  useEffect(() => {
-    setCameraPosition([-6, -1, 12]);
-  }, []);
+  // State Management
+  const [background, setBackground] = useState(skybox7);
 
+  // Toggle Environment
   const toggleBackground = () => {
-    setBackground((prev) =>
-      prev === "/textures/skybox7.hdr" ? "/textures/skybox3.hdr" : "/textures/skybox7.hdr"
-    );
+    setBackground((prev) => (prev === skybox7 ? skybox3 : skybox7));
   };
 
   return (
@@ -37,11 +36,16 @@ export default function App() {
         onClick={toggleBackground}
       ></div>
 
-      <Canvas camera={{ position: cameraPosition, fov: 50 }}>
+      <Canvas camera={{ position: [-6, -1, 12], fov: 50 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
         <House />
-        <Environment files={background} background />
+
+        <Suspense fallback={<color attach="background" args={["#333"]} />}>
+          {/* Directly pass the path string */}
+          <Environment files={background} background />
+        </Suspense>
+
         <OrbitControls target={[0, -1, 0]} />
       </Canvas>
 

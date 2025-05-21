@@ -6,15 +6,15 @@ import "./App.css";
 
 export default function App() {
   // Paths for HDR files
-  const skybox7 = "/textures/skybox7.hdr";
+  const forest = "/textures/forest.hdr"
   const skybox3 = "/textures/skybox3.hdr";
 
   // State Management
-  const [background, setBackground] = useState(skybox7);
+  const [background, setBackground] = useState(forest);
 
   // Toggle Environment
   const toggleBackground = () => {
-    setBackground((prev) => (prev === skybox7 ? skybox3 : skybox7));
+    setBackground((prev) => (prev === forest ? skybox3 : forest));
   };
 
   return (
